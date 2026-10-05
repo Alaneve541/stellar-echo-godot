@@ -1,0 +1,544 @@
+[gd_scene format=3 uid="uid://dx1seq1g8n8aq"]
+
+[ext_resource type="Script" uid="uid://dd2jxgdgl5wku" path="res://main.gd" id="1_272bh"]
+[ext_resource type="Script" uid="uid://n1pvq2bhsci8" path="res://player.gd" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://1rsco7asot4x" path="res://assets/ground_tile.png" id="2_5vw27"]
+[ext_resource type="Script" uid="uid://b364oy0p6uos4" path="res://wave_manager.gd" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cm44ppkqfkvre" path="res://enemy.tscn" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dhlavp0tnyaib" path="res://boss.tscn" id="4_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://bavey6etw8xqg" path="res://assets/shopbg.png" id="4_4c57u"]
+[ext_resource type="Texture2D" uid="uid://beoe2o4qtbwt5" path="res://assets/bg_star.png" id="4_kek77"]
+[ext_resource type="Texture2D" uid="uid://bl35le71i2307" path="res://assets/skillbg.png" id="5_4c57u"]
+[ext_resource type="Texture2D" uid="uid://bbe3hdfgcf4jf" path="res://assets/achievementbg.png" id="6_efxa6"]
+[ext_resource type="Texture2D" uid="uid://cmblklpg3fmlv" path="res://assets/building_tile.png" id="8_5vw27"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2jmi4"]
+albedo_texture = ExtResource("2_5vw27")
+uv1_scale = Vector3(8, 8, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2jmi4"]
+size = Vector2(60, 60)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2jmi4"]
+size = Vector3(60, 0.1, 60)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2jmi4"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_pd04y"]
+panorama = ExtResource("4_kek77")
+
+[sub_resource type="Sky" id="Sky_qrbg1"]
+sky_material = SubResource("PanoramaSkyMaterial_pd04y")
+
+[sub_resource type="Environment" id="Environment_aa8fl"]
+background_mode = 2
+sky = SubResource("Sky_qrbg1")
+ambient_light_source = 2
+ambient_light_color = Color(0.101960786, 0.101960786, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qrbg1"]
+albedo_texture = ExtResource("8_5vw27")
+
+[sub_resource type="BoxMesh" id="BoxMesh_2jmi4"]
+material = SubResource("StandardMaterial3D_qrbg1")
+size = Vector3(4, 4, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aa8fl"]
+size = Vector3(4, 4, 4)
+
+[node name="Main" type="Node3D" unique_id=1151775785]
+script = ExtResource("1_272bh")
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=677814386]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground" unique_id=2127789056]
+material_override = SubResource("StandardMaterial3D_2jmi4")
+mesh = SubResource("PlaneMesh_2jmi4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=2006364910]
+shape = SubResource("BoxShape3D_2jmi4")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1016570767]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -10)
+script = ExtResource("1_ig7tw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player" unique_id=569970769]
+shape = SubResource("CapsuleShape3D_2jmi4")
+
+[node name="Camera3D" type="Camera3D" parent="Player" unique_id=351306626]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/Camera3D" unique_id=1949251356]
+target_position = Vector3(0, 0, -20)
+
+[node name="Hud" type="CanvasLayer" parent="Player" unique_id=1003770780]
+
+[node name="InfoLabel" type="Label" parent="Player/Hud" unique_id=1458577927]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 60.0
+offset_bottom = 43.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+
+[node name="HUDRoot" type="Control" parent="Player/Hud" unique_id=1878161657]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Crosshair" type="Label" parent="Player/Hud/HUDRoot" unique_id=1993743379]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -22.5
+offset_right = 20.0
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "+"
+
+[node name="SkillLabel" type="Label" parent="Player/Hud/HUDRoot" unique_id=43617943]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -78.0
+offset_right = 60.0
+offset_bottom = -50.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="BossPanel" type="Control" parent="Player/Hud/HUDRoot" unique_id=550546987]
+visible = false
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 40.0
+offset_right = 880.0
+offset_bottom = 110.0
+
+[node name="BossName" type="Label" parent="Player/Hud/HUDRoot/BossPanel" unique_id=357020346]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "BOSS"
+
+[node name="HPBarBG" type="ColorRect" parent="Player/Hud/HUDRoot/BossPanel" unique_id=371283362]
+layout_mode = 0
+offset_top = 35.0
+offset_right = 600.0
+offset_bottom = 60.0
+color = Color(0, 0, 0, 1)
+
+[node name="HPBarFill" type="ColorRect" parent="Player/Hud/HUDRoot/BossPanel/HPBarBG" unique_id=560917074]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 25.0
+color = Color(0.8, 0.13333334, 0.13333334, 1)
+
+[node name="ShopPanel" type="Control" parent="Player/Hud/HUDRoot" unique_id=72875348]
+visible = false
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 150.0
+offset_right = 880.0
+offset_bottom = 550.0
+
+[node name="BG" type="TextureRect" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=2011407123]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 400.0
+texture = ExtResource("4_4c57u")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=1143576633]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 10.0
+offset_right = 240.0
+offset_bottom = 33.0
+theme_override_font_sizes/font_size = 32
+text = "商店"
+
+[node name="Item1Btn" type="Button" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=49342483]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 70.0
+offset_right = 580.0
+offset_bottom = 125.0
+
+[node name="Item2Btn" type="Button" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=85150925]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 130.0
+offset_right = 580.0
+offset_bottom = 185.0
+
+[node name="Item3Btn" type="Button" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=1876272835]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 190.0
+offset_right = 580.0
+offset_bottom = 245.0
+
+[node name="Item4Btn" type="Button" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=1418695705]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 250.0
+offset_right = 580.0
+offset_bottom = 305.0
+
+[node name="Item5Btn" type="Button" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=674677230]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 310.0
+offset_right = 580.0
+offset_bottom = 365.0
+
+[node name="Item6Btn" type="Button" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=1658833750]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 370.0
+offset_right = 580.0
+offset_bottom = 425.0
+
+[node name="CloseBtn" type="Button" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=1977374971]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 460.0
+offset_right = 350.0
+offset_bottom = 495.0
+
+[node name="MsgLabel" type="Label" parent="Player/Hud/HUDRoot/ShopPanel" unique_id=1580599169]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 430.0
+offset_right = 580.0
+offset_bottom = 460.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+
+[node name="SkillUpgradePanel" type="Control" parent="Player/Hud/HUDRoot" unique_id=506416095]
+visible = false
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 100.0
+offset_right = 880.0
+offset_bottom = 550.0
+
+[node name="BG" type="TextureRect" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=1936577296]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 450.0
+texture = ExtResource("5_4c57u")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=490626622]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 10.0
+offset_right = 304.0
+offset_bottom = 33.0
+theme_override_font_sizes/font_size = 32
+text = "技能升级"
+
+[node name="Skill1Btn" type="Button" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=2118461696]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 70.0
+offset_right = 580.0
+offset_bottom = 130.0
+
+[node name="Skill2Btn" type="Button" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=178262613]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 140.0
+offset_right = 580.0
+offset_bottom = 200.0
+
+[node name="Skill3Btn" type="Button" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=410049201]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 210.0
+offset_right = 580.0
+offset_bottom = 270.0
+
+[node name="Skill4Btn" type="Button" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=555309432]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 280.0
+offset_right = 580.0
+offset_bottom = 340.0
+
+[node name="MsgLabel" type="Label" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=1867390013]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 360.0
+offset_right = 580.0
+offset_bottom = 390.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+
+[node name="CloseBtn" type="Button" parent="Player/Hud/HUDRoot/SkillUpgradePanel" unique_id=1190196699]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 395.0
+offset_right = 350.0
+offset_bottom = 435.0
+text = "关闭"
+
+[node name="AchievementPanel" type="Control" parent="Player/Hud/HUDRoot" unique_id=1479258615]
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 80.0
+offset_right = 880.0
+offset_bottom = 580.0
+
+[node name="TextureRect" type="TextureRect" parent="Player/Hud/HUDRoot/AchievementPanel" unique_id=670910849]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 500.0
+texture = ExtResource("6_efxa6")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="Player/Hud/HUDRoot/AchievementPanel" unique_id=133475927]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 10.0
+offset_right = 284.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 32
+text = "成就"
+
+[node name="ListLabel" type="Label" parent="Player/Hud/HUDRoot/AchievementPanel" unique_id=2092627548]
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 0
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 580.0
+offset_bottom = 440.0
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 2
+
+[node name="AchMsgLabel" type="Label" parent="Player/Hud/HUDRoot/AchievementPanel" unique_id=206322473]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 445.0
+offset_right = 580.0
+offset_bottom = 475.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+
+[node name="CloseBtn" type="Button" parent="Player/Hud/HUDRoot/AchievementPanel" unique_id=324244217]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 445.0
+offset_right = 350.0
+offset_bottom = 480.0
+text = "关闭"
+
+[node name="InventoryPanel" type="Control" parent="Player/Hud/HUDRoot" unique_id=2064653193]
+visible = false
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 80.0
+offset_right = 880.0
+offset_bottom = 580.0
+
+[node name="BG" type="ColorRect" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=211989890]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 500.0
+color = Color(0.101960786, 0.101960786, 0.2, 1)
+
+[node name="Title" type="Label" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=1523268458]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 10.0
+offset_right = 280.0
+offset_bottom = 33.0
+theme_override_font_sizes/font_size = 32
+text = "背包与装备"
+
+[node name="BagTitle" type="Label" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=345267115]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 70.0
+offset_right = 94.0
+offset_bottom = 93.0
+theme_override_font_sizes/font_size = 20
+text = "背包物品"
+
+[node name="BagLabel" type="Label" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=348513173]
+custom_maximum_size = Vector2(540, -1)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 100.0
+offset_right = 570.0
+offset_bottom = 280.0
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 2
+
+[node name="EquipTitle" type="Label" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=555561263]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 290.0
+offset_right = 78.0
+offset_bottom = 313.0
+theme_override_font_sizes/font_size = 20
+text = "已装备"
+
+[node name="EquipLabel" type="Label" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=520370170]
+custom_maximum_size = Vector2(540, -1)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 320.0
+offset_right = 570.0
+offset_bottom = 440.0
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 2
+
+[node name="InvMsgLabel" type="Label" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=36211677]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 445.0
+offset_right = 570.0
+offset_bottom = 475.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+
+[node name="CloseBtn" type="Button" parent="Player/Hud/HUDRoot/InventoryPanel" unique_id=831813766]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 445.0
+offset_right = 350.0
+offset_bottom = 480.0
+text = "关闭"
+
+[node name="DailyQuestPanel" type="Control" parent="Player/Hud/HUDRoot" unique_id=938356175]
+visible = false
+anchors_preset = 0
+offset_left = 280.0
+offset_top = 80.0
+offset_right = 880.0
+offset_bottom = 580.0
+
+[node name="BG" type="ColorRect" parent="Player/Hud/HUDRoot/DailyQuestPanel" unique_id=78326500]
+layout_mode = 0
+offset_right = 600.0
+offset_bottom = 500.0
+color = Color(0.101960786, 0.101960786, 0.2, 1)
+
+[node name="Title" type="Label" parent="Player/Hud/HUDRoot/DailyQuestPanel" unique_id=1867128995]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 10.0
+offset_right = 240.0
+offset_bottom = 33.0
+theme_override_font_sizes/font_size = 32
+text = "每日任务"
+
+[node name="Quest1Btn" type="Button" parent="Player/Hud/HUDRoot/DailyQuestPanel" unique_id=1210544631]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 80.0
+offset_right = 580.0
+offset_bottom = 170.0
+
+[node name="Quest2Btn" type="Button" parent="Player/Hud/HUDRoot/DailyQuestPanel" unique_id=1144436138]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 190.0
+offset_right = 580.0
+offset_bottom = 280.0
+
+[node name="Quest3Btn" type="Button" parent="Player/Hud/HUDRoot/DailyQuestPanel" unique_id=1833532812]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 300.0
+offset_right = 580.0
+offset_bottom = 390.0
+
+[node name="QuestMsgLabel" type="Label" parent="Player/Hud/HUDRoot/DailyQuestPanel" unique_id=2011924915]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 410.0
+offset_right = 580.0
+offset_bottom = 440.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+
+[node name="CloseBtn" type="Button" parent="Player/Hud/HUDRoot/DailyQuestPanel" unique_id=425502909]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 455.0
+offset_right = 350.0
+offset_bottom = 490.0
+text = "关闭"
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1343899117]
+transform = Transform3D(0.70710677, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.70710677, -0.49999997, 0.49999997, 0, 0, 0)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1849884495]
+environment = SubResource("Environment_aa8fl")
+
+[node name="WaveManager" type="Node3D" parent="." unique_id=303762611]
+script = ExtResource("2_h2yge")
+enemy_scene = ExtResource("3_1bvp3")
+boss_scene = ExtResource("4_1bvp3")
+player_path = NodePath("../Player")
+
+[node name="Buildings" type="Node3D" parent="." unique_id=1986780407]
+
+[node name="Bulidings1" type="StaticBody3D" parent="Buildings" unique_id=1183696835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Buildings/Bulidings1" unique_id=2126433524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("BoxMesh_2jmi4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/Bulidings1" unique_id=327214634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_aa8fl")
+
+[node name="Bulidings2" type="StaticBody3D" parent="Buildings" unique_id=1626060215]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Buildings/Bulidings2" unique_id=1053870681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("BoxMesh_2jmi4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/Bulidings2" unique_id=2020390783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_aa8fl")
+
+[node name="Bulidings3" type="StaticBody3D" parent="Buildings" unique_id=2081348292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Buildings/Bulidings3" unique_id=77175724]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("BoxMesh_2jmi4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/Bulidings3" unique_id=1551878763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_aa8fl")
+
+[node name="Bulidings4" type="StaticBody3D" parent="Buildings" unique_id=1039448478]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -10)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Buildings/Bulidings4" unique_id=942755578]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("BoxMesh_2jmi4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Buildings/Bulidings4" unique_id=1532064504]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_aa8fl")
