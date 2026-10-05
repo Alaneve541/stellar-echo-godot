@@ -10,13 +10,19 @@
 
 
 
-
-
 \### 主菜单
 
 
 
 !\[主菜单](screenshots/menu.png)
+
+
+
+\### 登录注册
+
+
+
+!\[登录](screenshots/login.png)
 
 
 
@@ -28,6 +34,14 @@
 
 
 
+\### 背包与装备
+
+
+
+!\[背包](screenshots/bag.png)
+
+
+
 \### 商店
 
 
@@ -36,15 +50,35 @@
 
 
 
+\### 技能升级
+
+
+
+!\[技能升级](screenshots/skill.png)
+
+
+
+\### 成就
+
+
+
+!\[成就](screenshots/achievement.png)
+
+
+
+\### 每日任务
+
+
+
+!\[每日任务](screenshots/daily.png)
+
+
+
 \### 排行榜
 
 
 
-!\[排行榜](screenshots/leaderboard.png)
-
-
-
-\## 功能列表
+!\[排行榜](screenshots/leaderboard.png)## 功能列表
 
 
 
@@ -245,6 +279,4 @@
 
 
 \## 项目结构
-
-
 
